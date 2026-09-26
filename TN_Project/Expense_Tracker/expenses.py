@@ -4,7 +4,7 @@ try:
     with open("output.json", "r") as json_file:
         expenses = json.load(json_file)
     print("Previous expenses loaded!")
-except (FileNotFoundError,json.JSONDecodeError):
+except (FileNotFoundError, json.JSONDecodeError):
     expenses = []
 
 print("==========================\nwelcome to EXPENSE TRACKER\n==========================")
@@ -16,7 +16,6 @@ def add_expense():
             if amount <= 0:
                 print("That number you entered is not positive. Try again.\n")
                 continue
-
         except ValueError:
             print("Invalid input. Please enter valid digits for the amount.\n")
             continue
@@ -50,12 +49,19 @@ def view_all():
 
 def view_single():
     target = input("Enter expense ID: \n").strip()
-
-    if len(target)<= 0:
-        print("please enter a value!!!")
-    else:
-        for exp in expenses :
-            print(f"ID: {exp["id"]} | {exp['amount']} - {exp["category"]} - {exp['description']}")
+    if len(target) <= 0:
+        print("please enter a value!!!\n")
+        return
+    
+    try:
+        target_id = int(target)
+        for exp in expenses:
+            if exp.get("id") == target_id:
+                print(f"ID: {exp['id']} | {exp['amount']} - {exp['category']} - {exp['description']}\n")
+                return
+        print("ID not found\n")
+    except ValueError:
+        print("Please enter a valid numeric ID\n")
 
 def total_spending():
     total = sum(exp["amount"] for exp in expenses)
